@@ -1,5 +1,5 @@
 <template>
-    <div class="meetingList">
+    <div class="meetingList" style="padding-left:30px;">
         <vheader>
             <span slot="title" class="title">例行会议</span>
         </vheader>

@@ -6,6 +6,7 @@ import router from './router'
 import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'assets/css/reset.css'
+import VueClipboard from 'vue-clipboard2'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/css/zTreeStyle/zTreeStyle.css'
 import '@/assets/css/zTreeStyle.css'
@@ -16,6 +17,7 @@ import '@/assets/js/jquery.ztree.exedit.min.js'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.use(VueClipboard)
 
 // var sitUrl = document.querySelector('meta[name="server-name"]').getAttribute('content')
 // axios.defaults.baseURL = 'http://192.168.20.217:86'// 设置axios的默认访问地址

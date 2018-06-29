@@ -97,6 +97,7 @@ export default {
                   type: 'success'
                 })
                 localStorage.setItem('room', that.ruleForm2.user)
+                localStorage.setItem('userId', result.data.id)
                 that.$router.push('/MeetingList')
                 break
               default:

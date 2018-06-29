@@ -1,6 +1,6 @@
 <!-- 组成员管理 -->
 <template>
-  <div>
+  <div style="padding-left:30px;background:#fff">
     <vheader>
         <span slot="title" class="title">组成员管理</span>
       </vheader>

@@ -23,3 +23,14 @@ html {overflow-x: hidden;height: 100%;font-size: 12px;-webkit-tap-highlight-colo
 body {height: 100%;font-family: Arial, "Microsoft Yahei", "Helvetica Neue", Helvetica, sans-serif;color: #333;font-size: .28em;line-height: 1;-webkit-text-size-adjust: none;}
 hr {height: .02rem;margin: .1rem 0;border: medium none;border-top: .02rem solid #cacaca;}
 a {color: #25a4bb;text-decoration: none;}
+.search input,.search  .el-input__icon{
+    height: 32px;
+    line-height: 32px;
+  }
+  .search  .el-button--mini{
+    padding: 8px 15px;
+  }
+  .search .el-button{
+    padding: 8px 20px;
+  }
+  

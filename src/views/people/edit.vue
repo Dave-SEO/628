@@ -1,8 +1,8 @@
-<!-- 添加用户 -->
+<!-- 编辑用户 -->
 <template>
-  <div class="wrap">
+  <div class="wrap" style="padding-left:30px;">
       <vheader>
-          <a href="javascript:;" slot="back" class="back" @click="back">返回</a>
+          <a href="javascript:;" slot="back" class="back" @click="back" style="color:#000">返回</a>
       </vheader>
       <div class="content">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -15,11 +15,11 @@
                  </el-input>
             </el-form-item>
              <div class="select-group">
-               <span>账号</span>
-               <i>admin</i>
+               <span>用户名</span>
+               <i>{{editData.name}}</i>
             </div>
-            <el-form-item label="显示名" prop="user">
-                <el-input v-model="ruleForm.user"></el-input>
+            <el-form-item label="显示名" prop="updateDisplayName">
+                <el-input v-model="ruleForm.updateDisplayName"></el-input>
             </el-form-item>
             <div class="select-group">
                <span>组别</span>
@@ -32,8 +32,8 @@
              <el-form-item label="手机" prop="phone">
                 <el-input v-model="ruleForm.phone"></el-input>
             </el-form-item>
-            <el-form-item label="备注" prop="note">
-                <el-input type="textarea" v-model="ruleForm.note"></el-input>
+            <el-form-item label="备注" prop="remark">
+                <el-input type="textarea" v-model="ruleForm.remark"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="danger" size="medium" @click="submitForm('ruleForm')">确定</el-button>
@@ -100,12 +100,12 @@ export default {
     ]
     return {
       ruleForm: {
-        type: '与会者',
+        type: '',
         idCard: '',
-        user: '',
+        updateDisplayName: '',
         pwd: '123456',
         phone: '',
-        note: ''
+        remark: ''
       },
       rules: {
         type: [
@@ -118,13 +118,13 @@ export default {
             message: '请输入字母或数字，长度为5-20位',
             trigger: 'blur'}
         ],
-        user: [{required: true, min: 1, max: 50, message: '只可输入1-50个字符以内', trigger: 'blur'}],
+        updateDisplayName: [{required: true, min: 1, max: 50, message: '只可输入1-50个字符以内', trigger: 'blur'}],
         pwd: [
           {required: true,
             pattern: /^\d{1,20}$/g,
             message: '请输入数字，长度为1-20位',
             trigger: 'blur' }],
-        note: [{max: 200, message: '最多为200个字符'}]
+        remark: [{max: 200, message: '最多为200个字符'}]
       },
     //   组名
       groupName: '',
@@ -145,13 +145,35 @@ export default {
           radioType: "all"
         },
       },
-      zTreedata: zNodes
+      zTreedata: zNodes,
+      editData: {}
     }
   },
   components: {vheader},
   computed: {},
   mounted () {
    
+    this.$nextTick(()=>{
+      let id = this.$route.params.id
+     console.log('id',id)
+     this.$http.get('room/user/' + id).then((res) =>{
+       let result = res.data
+       switch(result.code){
+         case 200:
+          this.editData = res.data.data
+          this.ruleForm.updateDisplayName = res.data.data.display_name
+          if(res.data.data.user_type === 1){
+            this.ruleForm.type = '管理员'
+          }else{
+            this.ruleForm.type = '与会者'
+          }
+          this.ruleForm.phone = res.data.data.phone
+          this.ruleForm.remark = res.data.data.remark
+       }
+       
+     })
+    })
+
   },
   updated() {
      this.$nextTick(() => {
@@ -186,7 +208,32 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          let postData = {
+            action: 'updateDisplayName',
+            display_name: this.ruleForm.updateDisplayName,
+            phone: this.ruleForm.phone,
+            // group_id: this.ruleForm.group_id,
+            group_id: 1,
+            remark: this.ruleForm.remark
+          }
+           this.$http({
+            method: 'PATCH',
+            url: '/room/user/' + this.$route.params.id,
+            data: postData
+          }).then((res)=>{
+            let result = res.data
+            switch(result.code){
+              case 200:
+               this.$message({
+                  message: '修改成功',
+                  type: 'success',
+                  center: true
+                })
+                this.$router.push('/PeopleManagement')
+              break
+            }
+            console.log('----------',res.data)
+          })
         } else {
           console.log('error submit!!')
           return false

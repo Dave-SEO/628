@@ -18,13 +18,15 @@
                             <router-link to="/UserCenter">
                                 <el-dropdown-item>个人中心</el-dropdown-item>
                             </router-link>
-                            <el-dropdown-item>安全退出</el-dropdown-item>
+                            <div @click="logout">
+                                <el-dropdown-item >安全退出</el-dropdown-item>
+                            </div>
                         </el-dropdown-menu>
                     </el-dropdown>
                      <!-- <i class="el-submenu__icon-arrow el-icon-arrow-down" style="color:#FF8893;top: 60%;right: 28px;"></i> -->
                 </div>
                 <el-menu  @open="handleOpen"  @close="handleClose" :router='true' default-active='/MeetingList' :unique-opened='true' text-color='#FF8893'  active-text-color='#ffff'>
-                     <el-menu-item index="/MeetingList" class="lixing">
+                    <el-menu-item index="/MeetingList" class="lixing">
                         <i class="icon meeting_norma meeting_active"></i>
                         <span slot="title">例行会议</span>
                     </el-menu-item>
@@ -32,39 +34,37 @@
                     <el-submenu index="1">
                         <template slot="title" v-if="sign">
                             <div style="padding-left:21px;">
-                                <i class="icon  nav_icon_control_pressed "></i>
+                                <i class="icon  nav_icon_control_normal"></i>
                                 <span class="sign">站点管理</span>
                             </div>
                         </template>
                         <el-menu-item index="/PeopleManagement" class="renyuanguanli">
-                            <i class="icon meeting_norma meeting_active"></i>
+                            <i class="icon user_normal user_active"></i>
                             <span slot="title">人员管理</span>
                         </el-menu-item>
 
                         <el-submenu index="1-4" class="fenzu">
                             <template slot="title">
-                                <i class="icon  nav_icon_group_active "></i>
+                                <i class="icon  nav_icon_group_normal"></i>
                                 <span class="sign">分组管理</span>
                             </template>
                             <el-menu-item index="/GroupManagement">
-                                <i class="icon meeting_norma meeting_active"></i>
                                 <span slot="title">组管理</span>
                             </el-menu-item>
                             <el-menu-item index="/Member">
-                                <i class="icon meeting_norma meeting_active"></i>
                                 <span slot="title">组成员管理</span>
                             </el-menu-item>
                         </el-submenu>
 
                         <el-menu-item index="/MeetingManagement" class="huiyishiguanli">
-                            <i class="icon  nav_icon_mg_normal"></i>
+                            <i class="icon  nav_icon_mg_normal nav_icon_mg_active"></i>
                             <span slot="title">例行会议室管理</span>
                         </el-menu-item>
                     </el-submenu>
                 </el-menu>
             </el-aside>
            <el-container class="sub-container">
-               <router-view style="width:100%"></router-view>
+               <router-view style="width:100%;"></router-view>
            </el-container>
         </el-container>
         </el-col>
@@ -94,6 +94,25 @@ export default {
     },
     handleClose (key, keyPath) {
       console.log(key, keyPath)
+    },
+    logout () {
+      this.$http.get('/room/logout').then((res) => {
+        let result = res.data
+        switch (result.code) {
+          case 200:
+            this.$message({
+              message: '请重新登录',
+              type: 'success',
+              center: true
+            })
+            window.localStorage.clear()
+            this.$router.push('/')
+            break
+        }
+        console.log(res)
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   }
 }
@@ -105,7 +124,7 @@ export default {
 }
 .pages /deep/ .el-submenu .el-submenu__icon-arrow{
     // display: none;
-    color:#fff;
+    color:#FF8893;
 }
 .pages /deep/.el-menu{border:none;background: none;text-align: center;font-size: 16px;}
 .pages /deep/ .el-menu-item{
@@ -133,9 +152,9 @@ export default {
 }
 .pages /deep/ .fenzu{
          .el-submenu__title{
-            color: #fff !important;
             font-size: 15px;
         }
+        .el-icon-arrow-down{color: rgb(255, 136, 147) !important}
     }
 .pages /deep/ .lixing{
     padding-left: 40px !important;
@@ -156,15 +175,12 @@ export default {
     color: #333;
     line-height: 60px;
 }
-.pages /deep/ .sub-container{
-    padding-left:30px;
-}
+
 .pages{
     background:#F5F2EF;
     height: 100%;
     .sign{
         font-size: 16px;
-        color: #fff;
     }
     .renyuanguanli,.huiyishiguanli{
         span{
@@ -173,13 +189,18 @@ export default {
     }
 
     .leftView{
-          .is-active{
+         .el-menu-item.is-active{
                .icon.meeting_active{
                    background: url('../assets/images/meeting_active.png') no-repeat !important;
                    background-size: 100% 100%;
                }
-                .icon.nav_icon_control_normal{
-                   background: url('../assets/images/nav_icon_control_normal.png') no-repeat !important;
+               .icon.nav_icon_mg_active{
+                   background: url('../assets/images/nav_icon_mg_active.png') no-repeat !important;
+                   background-size: 100% 100%;
+               }
+               .icon.user_active{
+                   height: 14px;
+                   background: url('../assets/images/user_active.png') no-repeat !important;
                    background-size: 100% 100%;
                }
            }
@@ -191,16 +212,21 @@ export default {
                background: url('../assets/images/meeting_norma.png') no-repeat;
                background-size: 100% 100%;
            }
-            &.nav_icon_control_pressed{
-               background: url('../assets/images/nav_icon_control_pressed.png') no-repeat;
+            &.nav_icon_control_normal{
+               background: url('../assets/images/nav_icon_control_normal.png') no-repeat;
                background-size: 100% 100%;
            }
-            &.nav_icon_group_active{
-               background: url('../assets/images/nav_icon_group_active.png') no-repeat;
+            &.nav_icon_group_normal{
+               background: url('../assets/images/nav_icon_group_normal.png') no-repeat;
                background-size: 100% 100%;
            }
             &.nav_icon_mg_normal{
                background: url('../assets/images/nav_icon_mg_normal.png') no-repeat;
+               background-size: 100% 100%;
+           }
+            &.user_normal{
+               height: 14px;
+               background: url('../assets/images/user_normal.png') no-repeat;
                background-size: 100% 100%;
            }
         }

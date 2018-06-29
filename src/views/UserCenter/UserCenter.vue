@@ -1,6 +1,6 @@
 <!-- 个人中心 -->
 <template>
-  <div class="user-wrap">
+  <div class="user-wrap" style='padding-left:30px;'>
       <vheader>
           <span slot="title" class="title">个人中心</span>
       </vheader>
@@ -109,11 +109,32 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
-          this.$message({
-            message: '密码修改成功，请重新登录',
-            type: 'success',
-            center: true
+          let postData = {
+            action: 'updatePassword',
+            original_password: this.ruleForm2.initPwd,
+            password: this.ruleForm2.pass,
+            password_confirmation: this.ruleForm2.checkPass
+          }
+          console.log('postData', postData)
+          let userId = window.localStorage.getItem('userId')
+          this.$http({
+            method: 'PATCH',
+            url: '/room/user/' + userId,
+            data: postData
+          }).then((res) => {
+            let result = res.data
+            switch (result.code) {
+              case 200:
+                this.$message({
+                  message: '密码修改成功，请重新登录',
+                  type: 'success',
+                  center: true
+                })
+                window.localStorage.clear()
+                this.$router.push('/')
+                break
+            }
+            console.log('res', res)
           })
         } else {
           console.log('error submit!!')

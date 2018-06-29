@@ -1,6 +1,6 @@
 <!-- 加会 -->
 <template>
-  <div class="wrap">
+  <div class="wrap" style="padding-left:30px;">
       <div class="content">
          <span class="tips-span">如果您已安装过“唐桥云会议”客户端，请点击“立即启动会议”</span>
          <a href="javascript:void(0)" class="button">立即启动会议</a>

@@ -1,6 +1,6 @@
 <!-- 例行会议室管理-详情 -->
 <template>
-  <div class="wrap">
+  <div class="wrap" style="padding-left:30px;">
       <vheader>
           <a href="javascript:;" slot="back" class="back" @click="back">返回</a>
       </vheader>

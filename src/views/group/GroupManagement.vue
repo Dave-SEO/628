@@ -1,6 +1,6 @@
 <!-- 组管理 -->
 <template>
-  <div class="group-wrap">
+  <div class="group-wrap" style="background:#fff;padding-left:30px;">
       <vheader>
            <span slot="title" class="title">组管理</span>
        </vheader>

@@ -1,5 +1,5 @@
 <template>
-    <div class="peopleList" style="overflow-x: auto">
+    <div class="peopleList" style="overflow-x: auto;padding-left:30px;background:#fff">
         <vheader>
             <span slot="title" class="title">人员管理</span>
         </vheader>
@@ -9,10 +9,11 @@
         <div class="table-box">
           <div class="top">
             <div class="action">
-              <!-- <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview"
-                :on-remove="handleRemove" :before-remove="beforeRemove"  multiple :limit="3"  :on-exceed="handleExceed" :file-list="fileList">
+              <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :show-file-list='false'
+                :on-success = 'onSuccess' :on-error = 'onError' :before-upload='beforeUpload' :on-progress = 'onProgress'
+                  multiple :limit="3">
                 <a href="javascript:;"><i class="icon import_normal"></i>导入用户</a>
-              </el-upload> -->
+              </el-upload>
               <a href="javascript:;"><i class="icon template_normal"></i>模板下载</a>
             </div>
             <div class="search">
@@ -27,7 +28,7 @@
           </div>
           <div>
             <el-table :data="tableData" style="width: 100%">
-              <el-table-column prop="name" label="用户名" ></el-table-column>
+              <el-table-column prop="name" label="用户名" width='100px'></el-table-column>
               <el-table-column  prop="display_name" label="显示名" ></el-table-column>
               <el-table-column prop="group_name" label="组别"></el-table-column>
               <el-table-column prop="created_at" label="创建时间"></el-table-column>
@@ -55,6 +56,11 @@
         <el-dialog title="详情" width='386px' top='0' :visible.sync="dialogTableVisible">
             Java大牛带你从0到上线开发企业级电商项目Java大牛带你从0到上线开发企业级电商项目Java大牛带你从0到上线开发企业级电商项目
         </el-dialog>
+
+        <div class="daoru" style="font-size: 14px;border-width: 1px;border-style: solid;position: absolute;left: 0;right: 0;top: 0;margin: auto;z-index: 9999;width:240px;height:50px;line-height:50px;text-align:center;border-bottom-left-radius: 6px;border-bottom-right-radius: 6px;"
+          :style="{background: bg,color: bgColor,borderColor:borderColor}">
+            导入中{{daoru}}
+        </div>
     </div>
 </template>
 <script>
@@ -62,6 +68,10 @@ import vheader from 'components/vheader'
 export default {
   data () {
     return {
+      bg: '#f0f9eb',
+      bgColor: '#67c23a',
+      borderColor: '#e1f3d8',
+      daoru: '0%',
       dialogTableVisible: false,
       dialogFormVisible: false,
       input5: '',
@@ -72,7 +82,9 @@ export default {
       page: 1,
       num: 12,
       // 删除的id
-      del: ''
+      del: '',
+      // 上传进度
+      rate: 0
       // tableData: [{
       //   date: 'admin',
       //   name: 'admin',
@@ -145,6 +157,25 @@ export default {
     delCancel () {
       this.dialogFormVisible = false
       this.del = ''
+    },
+    // 文件上传
+    onSuccess (response, file, fileList) {
+      console.log('------------ddd----------')
+      console.log(response)
+      console.log(file)
+      console.log(fileList)
+    },
+    onError (errs, file, fileList) {
+    },
+    beforeUpload (file) {
+      console.log(this.rate)
+    },
+    onProgress (event, file, fileList) {
+      this.daoru = Math.floor(event.percent) + '%'
+
+      // console.log('event', Math.floor(event.percent) + '%')
+      // console.log(file)
+      // console.log('fileList', fileList)
     }
   },
   components: {
@@ -153,6 +184,16 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+.search /deep/ input,.search /deep/ .el-input__icon{
+  height: 32px;
+  line-height: 32px;
+}
+.search /deep/ .el-button--mini{
+  padding: 8px 15px;
+}
+.search /deep/ .el-button{
+  padding: 8px 20px;
+}
 .peopleList /deep/ .el-button--danger{
   background: #AB1D29;
   border:1px solid #AB1D29;
@@ -175,6 +216,7 @@ export default {
     border-bottom-left-radius: 0;
     color: #fff;
     border:1px solid #AB1D29;
+    margin-top: -13px;
   }
   .peopleList /deep/.el-table th {
         background-color: #F5F2EF;
@@ -198,6 +240,9 @@ export default {
  }
 
 .peopleList{
+  .upload-demo{
+    display: inline-block;
+  }
   .addpeople{
     position: absolute;
     top:15px;

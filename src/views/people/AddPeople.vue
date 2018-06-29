@@ -1,6 +1,6 @@
 <!-- 添加用户 -->
 <template>
-  <div class="wrap">
+  <div class="wrap" style="padding-left:30px;">
       <vheader>
           <a href="javascript:;" slot="back" class="back" @click="back">返回</a>
       </vheader>

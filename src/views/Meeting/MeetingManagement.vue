@@ -1,5 +1,5 @@
 <template>
-    <div class="peopleList" style="overflow-x: auto">
+    <div class="peopleList" style="overflow-x: auto;padding-left:30px;background:#fff">
         <vheader>
             <span slot="title" class="title">例行会议室管理</span>
         </vheader>
@@ -133,6 +133,7 @@ export default {
     border-bottom-left-radius: 0;
     color: #fff;
     border:1px solid #AB1D29;
+    margin-top: -13px;
   }
   .peopleList /deep/.el-table th {
         background-color: #F5F2EF;
